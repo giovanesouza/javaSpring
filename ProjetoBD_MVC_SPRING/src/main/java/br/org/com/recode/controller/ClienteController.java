@@ -74,4 +74,48 @@ public class ClienteController {
 		return cliente.getImagem();
 	}
 
+	// AO CLICAR NO NOME DO USUÁRIO, MOSTRA APENAS DETALHES REFERENTES AO USUÁRIO
+	// ESPECÍFICO
+	@GetMapping("/{id}")
+	public ModelAndView detalhar(@PathVariable Long id) {
+		ModelAndView modelAndView = new ModelAndView("cliente/detalhar.html");
+
+		// GET.ONE = SELECT
+		Cliente cliente = clienteRepository.getOne(id);
+		modelAndView.addObject("cliente", cliente);
+
+		return modelAndView;
+	}
+
+	// == EXCLUI UM CADASTRO
+	@GetMapping("/{id}/excluir")
+	public ModelAndView excluir(@PathVariable Long id) {
+		ModelAndView modelAndView = new ModelAndView("redirect:/cliente");
+		clienteRepository.deleteById(id);
+		return modelAndView;
+	}
+	
+	
+	// == EDITANDO UM CADASTRO - APENAS LISTA O CLIENTE E MOSTRA OS CAMPOS P/ EDIÇÃO
+	@GetMapping("/{id}/editar")
+    public ModelAndView editar(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("cliente/edicao");
+
+       Cliente cliente = clienteRepository.getOne(id);
+        modelAndView.addObject("cliente", cliente);
+
+       return modelAndView;
+    }
+	
+	// ATUALIZA CONTATO NO BANCO
+	  @PostMapping("/{id}/editar")
+	    public ModelAndView editar(Cliente cliente) {
+	        ModelAndView modelAndView = new ModelAndView("redirect:/cliente");
+	   
+	        clienteRepository.save(cliente);
+
+	       return modelAndView;
+	    }
+	
+
 }
